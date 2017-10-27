@@ -28,8 +28,8 @@ namespace GraphQL.Server.Operation
             {
                 if (methodInfo.Name == nameof(IOperation.Register)) continue;
 
-                var isQuery = Enumerable.Any(methodInfo.CustomAttributes, a => a.AttributeType == typeof(QueryAttribute));
-                var isMutation = Enumerable.Any(methodInfo.CustomAttributes, a => a.AttributeType == typeof(MutationAttribute));
+                var isQuery = methodInfo.CustomAttributes.Any(a => a.AttributeType == typeof(QueryAttribute));
+                var isMutation = methodInfo.CustomAttributes.Any(a => a.AttributeType == typeof(MutationAttribute));
                 if (!isQuery && !isMutation)
                 {
                     isQuery = true;
@@ -41,7 +41,7 @@ namespace GraphQL.Server.Operation
                 {
                     throw new GraphException($"An operation method must have one input parameter. Operation: {typeof(TInterface).Name}.{methodInfo.Name}");
                 }
-                var fieldName = StringExtensions.PascalCase(methodInfo.Name);
+                var fieldName = methodInfo.Name.ToCamelCase();
                 var fieldDescription = "";
                 var queryArguments = GraphArguments.FromModel(parameters[0].ParameterType).GetQueryArguments();
                 // Add function as operation
@@ -70,7 +70,7 @@ namespace GraphQL.Server.Operation
 
         public void AddPostOperation(string operationName, Func<ResolveFieldContext<object>, string, object, object> postFunction)
         {
-            PostOperations[StringExtensions.PascalCase(operationName)] = postFunction;
+            PostOperations[operationName.ToCamelCase()] = postFunction;
         }
 
         public void AddPostOperation(Expression<Func<TInterface, string>> expression, Func<ResolveFieldContext<object>, string, object, object> postFunction)
