@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{0B8CC7C2-16D1-4D48-87AB-A3DECB2E937F}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,23 +13,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{0B8CC7C2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{6E39D822-E768-434E-AB95-6391333D6808}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Server", "src\GraphQL.Server\GraphQL.Server.csproj", "{4BAE5451-1FD2-4514-B5C4-0663E5D7D967}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old.GraphQL.Server", "src\Old.GraphQL.Server\Old.GraphQL.Server.csproj", "{4BAE5451-1FD2-4514-B5C4-0663E5D7D967}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Server.SimpleInjector", "src\GraphQL.Server.SimpleInjector\GraphQL.Server.SimpleInjector.csproj", "{DB35689A-A503-49A7-BEA2-E28DA002AE4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old.GraphQL.Server.SimpleInjector", "src\Old.GraphQL.Server.SimpleInjector\Old.GraphQL.Server.SimpleInjector.csproj", "{DB35689A-A503-49A7-BEA2-E28DA002AE4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{586DF059-5E72-4162-B713-E4122E0CF17F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Server.Test", "test\GraphQL.Server.Test\GraphQL.Server.Test.csproj", "{C9A99D5E-6E4E-440B-9096-9A77C4456022}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old.GraphQL.Server.Test", "test\GraphQL.Server.Test\Old.GraphQL.Server.Test.csproj", "{C9A99D5E-6E4E-440B-9096-9A77C4456022}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Server.Sample", "src\GraphQL.Server.Sample\GraphQL.Server.Sample.csproj", "{5F12F18B-4C7B-434C-A083-8BB9CF78B3BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old.GraphQL.Server.Sample", "src\Old.GraphQL.Server.Sample\Old.GraphQL.Server.Sample.csproj", "{5F12F18B-4C7B-434C-A083-8BB9CF78B3BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Client", "src\GraphQL.Client\GraphQL.Client.csproj", "{2680DF57-B724-4680-83FB-C1159841E08A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old.GraphQL.Client", "src\Old.GraphQL.Client\Old.GraphQL.Client.csproj", "{2680DF57-B724-4680-83FB-C1159841E08A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Client.Test", "test\GraphQL.Client.Test\GraphQL.Client.Test.csproj", "{7E4B4504-B43A-4739-BEDB-1E530A939438}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old.GraphQL.Client.Test", "test\GraphQL.Client.Test\Old.GraphQL.Client.Test.csproj", "{7E4B4504-B43A-4739-BEDB-1E530A939438}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Server.Sample.Service", "src\GraphQL.Server.Sample.Service\GraphQL.Server.Sample.Service.csproj", "{C53EE451-A987-4845-BDB3-26BE54341D74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old.GraphQL.Server.Sample.Service", "src\Old.GraphQL.Server.Sample.Service\Old.GraphQL.Server.Sample.Service.csproj", "{C53EE451-A987-4845-BDB3-26BE54341D74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Server.Sample.Interface", "src\GraphQL.Server.Sample.Interface\GraphQL.Server.Sample.Interface.csproj", "{517ABDA3-1D57-4A34-8343-9BE4091FB936}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old.GraphQL.Server.Sample.Interface", "src\Old.GraphQL.Server.Sample.Interface\Old.GraphQL.Server.Sample.Interface.csproj", "{517ABDA3-1D57-4A34-8343-9BE4091FB936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Server", "src\GraphQL.Server\GraphQL.Server.csproj", "{610F3D23-6811-45CA-B1EC-2523DF542CAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Gateway", "src\Sample.Gateway\Sample.Gateway.csproj", "{2493B2BB-AC70-499C-9AC5-2C805557CC98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Service", "src\Sample.Service\Sample.Service.csproj", "{856B0A5E-5C9A-403C-85CF-7A4B83577FFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Service.Interface", "src\Sample.Service.Interface\Sample.Service.Interface.csproj", "{4B99E6CC-F82F-497A-B588-6F30C8824F7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQL.Client", "src\GraphQL.Client\GraphQL.Client.csproj", "{4D68E398-6033-40FB-A041-23CA9878BA2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +79,26 @@ Global
 		{517ABDA3-1D57-4A34-8343-9BE4091FB936}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{517ABDA3-1D57-4A34-8343-9BE4091FB936}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{517ABDA3-1D57-4A34-8343-9BE4091FB936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{610F3D23-6811-45CA-B1EC-2523DF542CAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{610F3D23-6811-45CA-B1EC-2523DF542CAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{610F3D23-6811-45CA-B1EC-2523DF542CAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{610F3D23-6811-45CA-B1EC-2523DF542CAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2493B2BB-AC70-499C-9AC5-2C805557CC98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2493B2BB-AC70-499C-9AC5-2C805557CC98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2493B2BB-AC70-499C-9AC5-2C805557CC98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2493B2BB-AC70-499C-9AC5-2C805557CC98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{856B0A5E-5C9A-403C-85CF-7A4B83577FFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{856B0A5E-5C9A-403C-85CF-7A4B83577FFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{856B0A5E-5C9A-403C-85CF-7A4B83577FFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{856B0A5E-5C9A-403C-85CF-7A4B83577FFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B99E6CC-F82F-497A-B588-6F30C8824F7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B99E6CC-F82F-497A-B588-6F30C8824F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B99E6CC-F82F-497A-B588-6F30C8824F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B99E6CC-F82F-497A-B588-6F30C8824F7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D68E398-6033-40FB-A041-23CA9878BA2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D68E398-6033-40FB-A041-23CA9878BA2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D68E398-6033-40FB-A041-23CA9878BA2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D68E398-6033-40FB-A041-23CA9878BA2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,5 +106,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C9A99D5E-6E4E-440B-9096-9A77C4456022} = {586DF059-5E72-4162-B713-E4122E0CF17F}
 		{7E4B4504-B43A-4739-BEDB-1E530A939438} = {586DF059-5E72-4162-B713-E4122E0CF17F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D60C9DC-B004-4A9B-B823-CCC747A4A7C3}
 	EndGlobalSection
 EndGlobal

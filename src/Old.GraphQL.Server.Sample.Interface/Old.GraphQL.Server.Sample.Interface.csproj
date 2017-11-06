@@ -46,9 +46,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphQL.Server\GraphQL.Server.csproj">
+    <ProjectReference Include="..\Old.GraphQL.Server\Old.GraphQL.Server.csproj">
       <Project>{4BAE5451-1FD2-4514-B5C4-0663E5D7D967}</Project>
-      <Name>GraphQL.Server</Name>
+      <Name>Old.GraphQL.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

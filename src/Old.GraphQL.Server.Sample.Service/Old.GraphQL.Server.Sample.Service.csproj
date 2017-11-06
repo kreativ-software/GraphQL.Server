@@ -24,6 +24,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -115,17 +116,17 @@
     <Compile Include="Repository\Data.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphQL.Server.Sample.Interface\GraphQL.Server.Sample.Interface.csproj">
+    <ProjectReference Include="..\Old.GraphQL.Server.Sample.Interface\Old.GraphQL.Server.Sample.Interface.csproj">
       <Project>{517abda3-1d57-4a34-8343-9be4091fb936}</Project>
-      <Name>GraphQL.Server.Sample.Interface</Name>
+      <Name>Old.GraphQL.Server.Sample.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GraphQL.Server.SimpleInjector\GraphQL.Server.SimpleInjector.csproj">
+    <ProjectReference Include="..\Old.GraphQL.Server.SimpleInjector\Old.GraphQL.Server.SimpleInjector.csproj">
       <Project>{db35689a-a503-49a7-bea2-e28da002ae4b}</Project>
-      <Name>GraphQL.Server.SimpleInjector</Name>
+      <Name>Old.GraphQL.Server.SimpleInjector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GraphQL.Server\GraphQL.Server.csproj">
+    <ProjectReference Include="..\Old.GraphQL.Server\Old.GraphQL.Server.csproj">
       <Project>{4bae5451-1fd2-4514-b5c4-0663e5d7d967}</Project>
-      <Name>GraphQL.Server</Name>
+      <Name>Old.GraphQL.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
