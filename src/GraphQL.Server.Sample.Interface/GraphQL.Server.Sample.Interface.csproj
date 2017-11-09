@@ -47,9 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GraphQL.Server\GraphQL.Server.csproj">
-      <Project>{4BAE5451-1FD2-4514-B5C4-0663E5D7D967}</Project>
+      <Project>{4bae5451-1fd2-4514-b5c4-0663e5d7d967}</Project>
       <Name>GraphQL.Server</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
