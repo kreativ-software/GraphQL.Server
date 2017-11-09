@@ -13,4 +13,10 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GraphQL.Client\GraphQL.Client.csproj" />
+    <ProjectReference Include="..\GraphQL.Server\GraphQL.Server.csproj" />
+    <ProjectReference Include="..\Sample.Service.Interface\Sample.Service.Interface.csproj" />
+  </ItemGroup>
+
 </Project>

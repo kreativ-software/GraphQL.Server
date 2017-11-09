@@ -19,7 +19,7 @@ namespace Sample.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddSingleton<Schema>(provider =>
+            services.AddSingleton<Engine>(provider =>
             {
                 return Engine.New()
                     .AddSchema<SampleSchema>()
