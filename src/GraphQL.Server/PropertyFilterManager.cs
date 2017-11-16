@@ -8,19 +8,19 @@ namespace GraphQL.Server
 {
     public class PropertyFilterManager
     {
-        private List<Func<ResolveFieldContext<object>, PropertyInfo, string, object, object>> PropertyFilters { get; set; }
+        private List<Func<ResolverInfo, PropertyInfo, string, object, object>> PropertyFilters { get; set; }
 
         public PropertyFilterManager()
         {
-            PropertyFilters = new List<Func<ResolveFieldContext<object>, PropertyInfo, string, object, object>>();
+            PropertyFilters = new List<Func<ResolverInfo, PropertyInfo, string, object, object>>();
         }
 
-        public void AddPropertyFilter(Func<ResolveFieldContext<object>, PropertyInfo, string, object, object> filter)
+        public void AddPropertyFilter(Func<ResolverInfo, PropertyInfo, string, object, object> filter)
         {
             PropertyFilters.Add(filter);
         }
 
-        public void AddPropertyFilter<T>(Func<ResolveFieldContext<object>, PropertyInfo, string, T, T> filter)
+        public void AddPropertyFilter<T>(Func<ResolverInfo, PropertyInfo, string, T, T> filter)
         {
             PropertyFilters.Add((context, propertyInfo, name, value) =>
             {
@@ -76,7 +76,7 @@ namespace GraphQL.Server
             return false;
         }
 
-        public object Filter(ResolveFieldContext<object> context, PropertyInfo propertyInfo, string name, object value)
+        public object Filter(ResolverInfo context, PropertyInfo propertyInfo, string name, object value)
         {
             foreach (var filter in PropertyFilters)
             {

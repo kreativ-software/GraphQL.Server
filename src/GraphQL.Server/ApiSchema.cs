@@ -149,12 +149,12 @@ namespace GraphQL.Server
             RegisterTypes(TypeLoader.TypeMappings.Values.Select(v => v.GraphType).ToArray());
         }
 
-        public void AddPropertyFilter(Func<ResolveFieldContext<object>, PropertyInfo, string, object, object> filter)
+        public void AddPropertyFilter(Func<ResolverInfo, PropertyInfo, string, object, object> filter)
         {
             PropertyFilterManager.AddPropertyFilter(filter);
         }
 
-        public void AddPropertyFilter<T>(Func<ResolveFieldContext<object>, PropertyInfo, string, T, T> filter)
+        public void AddPropertyFilter<T>(Func<ResolverInfo, PropertyInfo, string, T, T> filter)
         {
             PropertyFilterManager.AddPropertyFilter(filter);
         }
