@@ -85,6 +85,7 @@ namespace GraphQL.Server
     public class GraphData<T> : GraphQLOutput
     {
         public object RawData { get; set; }
+        public T Data { get; set; }
 
         public static GraphData<T> Create(GraphQLOutput graphQlOutput, T data, object rawData)
         {
