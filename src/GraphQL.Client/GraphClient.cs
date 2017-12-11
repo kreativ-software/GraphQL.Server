@@ -20,8 +20,8 @@ namespace GraphQL.Client
     {
         public static readonly string CacheIgnoreHeader = "cache-ignore-headers";
         public string ApiUrl { get; set; }
-        private HttpClient HttpClient { get; set; }
-        public Dictionary<string, string> Headers { get; set; }
+        public HttpClient HttpClient { get; private set; }
+        //public Dictionary<string, string> Headers { get; set; }
         private List<IGraphQuery> Queries { get; set; }
         private ICacheManager<object> CacheManager { get; set; }
 
@@ -37,7 +37,7 @@ namespace GraphQL.Client
         {
             ApiUrl = apiUrl;
             HttpClient = httpClient;
-            Headers = new Dictionary<string, string>();
+            //Headers = new Dictionary<string, string>();
             if (HttpClient.BaseAddress == null)
             {
                 HttpClient.BaseAddress = new Uri(ApiUrl);
@@ -155,18 +155,12 @@ namespace GraphQL.Client
                 variables = variables == null ? null : JsonConvert.SerializeObject(variables)
             };
             // Post query
-            HttpClient.DefaultRequestHeaders.Accept.Clear();
-            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            foreach (var header in Headers)
-            {
-                if (HttpClient.DefaultRequestHeaders.Contains(header.Key)) HttpClient.DefaultRequestHeaders.Remove(header.Key);
-                HttpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
-            }
             string cacheKey = null;
             GraphOutput output = null;
             if (CacheManager != null && cacheUntil != null)
             {
-                cacheKey = GetCacheKey(input, Headers);
+                var headers = ConvertHeaders(HttpClient.DefaultRequestHeaders);
+                cacheKey = GetCacheKey(input, headers);
                 var cacheKeyExists = CacheManager.Exists(cacheKey);
                 output = cacheKeyExists ? CacheManager.Get<GraphOutput>(cacheKey) : null;
             }
@@ -214,9 +208,19 @@ namespace GraphQL.Client
             return output;
         }
 
+        private Dictionary<string, string> ConvertHeaders(HttpRequestHeaders headers)
+        {
+            var output = new Dictionary<string, string>();
+            foreach (var header in headers)
+            {
+                output[header.Key] = string.Join(",", header.Value);
+            }
+            return output;
+        }
+
         private string GetCacheKey(object input, Dictionary<string, string> headers)
         {
-            var cacheIgnoreHeader = headers.ContainsKey(CacheIgnoreHeader) ? headers[CacheIgnoreHeader] : null; ;
+            var cacheIgnoreHeader = headers.ContainsKey(CacheIgnoreHeader) ? headers[CacheIgnoreHeader] : null;
             var cacheIgnoreHeaderKeys = cacheIgnoreHeader?.Split(',').Select(v => v.ToLower()) ?? new string[0];
             var cacheHeaders = new Dictionary<string, string>();
             foreach (var header in headers)
