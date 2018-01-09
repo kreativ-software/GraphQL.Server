@@ -13,6 +13,7 @@ using GraphQL.Language.AST;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using System.Text;
 
 namespace GraphQL.Client
 {
@@ -21,7 +22,7 @@ namespace GraphQL.Client
         public static readonly string CacheIgnoreHeader = "cache-ignore-headers";
         public string ApiUrl { get; set; }
         public HttpClient HttpClient { get; private set; }
-        //public Dictionary<string, string> Headers { get; set; }
+        public Dictionary<string, string> Headers { get; set; }
         private List<IGraphQuery> Queries { get; set; }
         private ICacheManager<object> CacheManager { get; set; }
 
@@ -33,11 +34,11 @@ namespace GraphQL.Client
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
         };
 
-        public GraphClient(string apiUrl, HttpClient httpClient, ICacheManager<object> cacheManager = null)
+        public GraphClient(string apiUrl, HttpClient httpClient, Dictionary<string, string> headers = null, ICacheManager<object> cacheManager = null)
         {
             ApiUrl = apiUrl;
             HttpClient = httpClient;
-            //Headers = new Dictionary<string, string>();
+            Headers = headers;
             if (HttpClient.BaseAddress == null)
             {
                 HttpClient.BaseAddress = new Uri(ApiUrl);
@@ -166,13 +167,26 @@ namespace GraphQL.Client
             }
             if (output == null)
             {
-                var response = await HttpClient.PostAsJsonAsync("", input).ConfigureAwait(false);
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                if (!response.IsSuccessStatusCode)
+                var inputContent = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
+                if (Headers != null)
                 {
-                    throw new HttpException((int)response.StatusCode, content);
+                    foreach (var header in Headers)
+                    {
+                        if (inputContent.Headers.Contains(header.Key))
+                        {
+                            inputContent.Headers.Remove(header.Key);
+                        }
+                        inputContent.Headers.Add(header.Key, header.Value);
+                    }
                 }
-                var json = JObject.Parse(content);
+                var response = HttpClient.PostAsync("", inputContent);
+                //var response = await HttpClient.PostAsJsonAsync("", input).ConfigureAwait(false);
+                var responseContent = await response.Result.Content.ReadAsStringAsync().ConfigureAwait(false);
+                if (!response.Result.IsSuccessStatusCode)
+                {
+                    throw new HttpException((int)response.Result.StatusCode, responseContent);
+                }
+                var json = JObject.Parse(responseContent);
                 var errors = json.Value<JArray>("errors");
                 output = new GraphOutput
                 {
@@ -261,7 +275,7 @@ namespace GraphQL.Client
 
     public class GraphClient<TInterface> : GraphClient where TInterface : class
     {
-        public GraphClient(string apiUrl, HttpClient httpClient, ICacheManager<object> cacheManager = null) : base(apiUrl, httpClient, cacheManager)
+        public GraphClient(string apiUrl, HttpClient httpClient, Dictionary<string, string> headers = null, ICacheManager<object> cacheManager = null) : base(apiUrl, httpClient, headers, cacheManager)
         {
         }
 
