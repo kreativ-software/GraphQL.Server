@@ -8,13 +8,13 @@ namespace GraphQL.Server
     public class GraphQLQuery
     {
         public string Query { get; set; }
-        public string Variables { get; set; }
+        public Dictionary<string, object> Variables { get; set; }
 
         public Inputs GetInputs()
         {
-            if (string.IsNullOrEmpty(Variables)) return null;
-            var variables = Deserialize(Variables);
-            return variables == null ? null : new Inputs(variables);
+            //if (string.IsNullOrEmpty(Variables)) return null;
+            //var variables = Deserialize(Variables);
+            return Variables == null ? null : new Inputs(Variables);
         }
 
         private Dictionary<string, object> Deserialize(string json)
