@@ -25,6 +25,7 @@ namespace GraphQL.Client
         public Dictionary<string, string> Headers { get; set; }
         private List<IGraphQuery> Queries { get; set; }
         private ICacheManager<object> CacheManager { get; set; }
+        public event Action<GraphOutput> Log;
 
         protected static JsonSerializerSettings SerializerSettings = new JsonSerializerSettings()
         {
@@ -180,21 +181,33 @@ namespace GraphQL.Client
                     }
                 }
                 var response = HttpClient.PostAsync("", inputContent);
-                //var response = await HttpClient.PostAsJsonAsync("", input).ConfigureAwait(false);
                 var responseContent = await response.Result.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (!response.Result.IsSuccessStatusCode)
                 {
-                    throw new HttpException((int)response.Result.StatusCode, responseContent);
+                    //throw new HttpException((int)response.Result.StatusCode, responseContent);
+                    output = new GraphOutput
+                    {
+                        Data = null,
+                        Errors = new GraphOutputError[] { new GraphOutputError(){
+                            Message = $"Http call failed. Code: {response.Result.StatusCode}",
+                            Detail = responseContent
+                        } },
+                        Query = fullQuery,
+                        Variables = input.variables
+                    };
                 }
-                var json = JObject.Parse(responseContent);
-                var errors = json.Value<JArray>("errors");
-                output = new GraphOutput
+                else
                 {
-                    Data = json.Value<JObject>("data"),
-                    Errors = errors == null ? new GraphOutputError[0] : errors.ToObject<GraphOutputError[]>(),
-                    Query = fullQuery,
-                    Variables = input.variables
-                };
+                    var json = JObject.Parse(responseContent);
+                    var errors = json.Value<JArray>("errors");
+                    output = new GraphOutput
+                    {
+                        Data = json.Value<JObject>("data"),
+                        Errors = errors == null ? new GraphOutputError[0] : errors.ToObject<GraphOutputError[]>(),
+                        Query = fullQuery,
+                        Variables = input.variables
+                    };
+                }
             }
             // Populate output objects
             if (output.Data != null)
@@ -219,6 +232,8 @@ namespace GraphQL.Client
                     }
                 }
             }
+            Log?.Invoke(output);
+
             return output;
         }
 
