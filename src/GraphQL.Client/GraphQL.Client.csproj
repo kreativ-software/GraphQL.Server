@@ -58,6 +58,7 @@
     <Compile Include="GraphEnumConverter.cs" />
     <Compile Include="GraphOutput.cs" />
     <Compile Include="GraphOutputError.cs" />
+    <Compile Include="GraphOutputStats.cs" />
     <Compile Include="GraphQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryType.cs" />

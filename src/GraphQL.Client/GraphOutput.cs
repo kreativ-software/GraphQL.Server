@@ -10,6 +10,7 @@ namespace GraphQL.Client
         public bool HasErrors => Errors.Length > 0;
         public string Query { get; set; }
         public string Variables { get; set; }
+        public GraphOutputStats Stats { get; set; }
 
         public void ThrowErrors()
         {

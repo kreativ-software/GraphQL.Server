@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System.Text;
+using System.Diagnostics;
 
 namespace GraphQL.Client
 {
@@ -40,6 +41,7 @@ namespace GraphQL.Client
             ApiUrl = apiUrl;
             HttpClient = httpClient;
             Headers = headers;
+
             if (HttpClient.BaseAddress == null)
             {
                 HttpClient.BaseAddress = new Uri(ApiUrl);
@@ -148,6 +150,11 @@ namespace GraphQL.Client
 
         private async Task<GraphOutput> RunQueryTypeAsync(string queryType, string name, object variables, Func<GraphOutput, DateTime> cacheUntil)
         {
+            var stats = new GraphOutputStats()
+            {
+                Headers = Headers,
+                Url = HttpClient.BaseAddress
+            }.Start();
             // Build query
             var queries = Queries.Select(q => $"{q.Operation}{q.GetSelectFields()}");
             var fullQuery = $"{queryType} {name}{{{string.Join(" ", queries)}}}";
@@ -168,7 +175,14 @@ namespace GraphQL.Client
             }
             if (output == null)
             {
-                var inputContent = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
+                output = new GraphOutput
+                {
+                    Query = fullQuery,
+                    Stats = stats,
+                    Variables = input.variables
+                };
+                var inputJson = JsonConvert.SerializeObject(input);
+                var inputContent = new StringContent(inputJson, Encoding.UTF8, "application/json");
                 if (Headers != null)
                 {
                     foreach (var header in Headers)
@@ -180,33 +194,30 @@ namespace GraphQL.Client
                         inputContent.Headers.Add(header.Key, header.Value);
                     }
                 }
+                var requestHeaderSize = JsonConvert.SerializeObject(Headers).Length;
+                stats.StartHttp(requestHeaderSize, inputJson.Length);
+
                 var response = HttpClient.PostAsync("", inputContent);
                 var responseContent = await response.Result.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                var responseHeaderSize = JsonConvert.SerializeObject(response.Result.Headers).Length;
+                stats.StopHttp(response.Result.StatusCode, responseHeaderSize, responseContent.Length);
+
                 if (!response.Result.IsSuccessStatusCode)
                 {
-                    //throw new HttpException((int)response.Result.StatusCode, responseContent);
-                    output = new GraphOutput
-                    {
-                        Data = null,
-                        Errors = new GraphOutputError[] { new GraphOutputError(){
+                    output.Errors = new GraphOutputError[] {
+                        new GraphOutputError() {
                             Message = $"Http call failed. Code: {response.Result.StatusCode}",
                             Detail = responseContent
-                        } },
-                        Query = fullQuery,
-                        Variables = input.variables
+                        }
                     };
                 }
                 else
                 {
                     var json = JObject.Parse(responseContent);
                     var errors = json.Value<JArray>("errors");
-                    output = new GraphOutput
-                    {
-                        Data = json.Value<JObject>("data"),
-                        Errors = errors == null ? new GraphOutputError[0] : errors.ToObject<GraphOutputError[]>(),
-                        Query = fullQuery,
-                        Variables = input.variables
-                    };
+                    output.Data = json.Value<JObject>("data");
+                    output.Errors = errors == null ? new GraphOutputError[0] : errors.ToObject<GraphOutputError[]>();
                 }
             }
             // Populate output objects
@@ -232,6 +243,7 @@ namespace GraphQL.Client
                     }
                 }
             }
+            stats.Stop();
             Log?.Invoke(output);
 
             return output;
