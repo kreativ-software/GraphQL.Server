@@ -7,9 +7,7 @@ namespace GraphQL.Client
 {
     public class GraphOutputStats
     {
-        public Dictionary<string, string> Headers { get; set; }
         public TimeSpan HttpDuration { get; set; }
-        public HttpStatusCode HttpStatusCode { get; set; }
         public int RequestBodySize { get; set; }
         public int RequestHeaderSize { get; set; }
         public int RequestSize => RequestHeaderSize + RequestBodySize;

@@ -152,7 +152,6 @@ namespace GraphQL.Client
         {
             var stats = new GraphOutputStats()
             {
-                Headers = Headers,
                 Url = HttpClient.BaseAddress
             }.Start();
             // Build query
