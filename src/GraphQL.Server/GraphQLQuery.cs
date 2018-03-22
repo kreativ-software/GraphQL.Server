@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace GraphQL.Server
@@ -12,21 +11,29 @@ namespace GraphQL.Server
 
         public Inputs GetInputs()
         {
-            //if (string.IsNullOrEmpty(Variables)) return null;
-            //var variables = Deserialize(Variables);
-            return Variables == null ? null : new Inputs(Variables);
+            if (Variables == null) return null;
+            var inputVariables = Variables.ToDictionary(kv => kv.Key, kv => Deserialize(kv.Value));
+            return new Inputs(inputVariables);
         }
 
-        private Dictionary<string, object> Deserialize(string json)
+        private object Deserialize(object val)
         {
-            var output = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-            if (output == null) return null;
-            var keys = output.Keys.ToList();
-            for (var ct = 0; ct < output.Count; ct++)
+            if (val is JArray)
             {
-                if (output[keys[ct]] is JObject) output[keys[ct]] = Deserialize((output[keys[ct]] as JObject).ToString());
+                var array = val as JArray;
+                return array.Select(item => Deserialize(item)).ToArray();
             }
-            return output;
+            if (val is JObject)
+            {
+                var obj = val as JObject;
+                var dictionary = obj.ToObject<Dictionary<string, object>>();
+                return dictionary.ToDictionary(kv => kv.Key, kv => Deserialize(kv.Value));
+            }
+            if (val is JValue)
+            {
+                return (val as JValue).Value;
+            }
+            return val;
         }
     }
 }
