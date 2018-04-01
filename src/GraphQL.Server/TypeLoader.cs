@@ -36,7 +36,9 @@ namespace GraphQL.Server
             { typeof(Uri), typeof(Types.UriGraphType) },
             { typeof(long), typeof(Types.LongGraphType) },
             { typeof(double), typeof(Types.DoubleGraphType) },
-            { typeof(decimal), typeof(DecimalGraphType) }
+            { typeof(decimal), typeof(DecimalGraphType) },
+            { typeof(DateTimeOffset), typeof(Types.DateTimeOffsetType) },
+            { typeof(TimeSpan), typeof(Types.TimeSpanType) }
         };
 
         public static Type GetGraphType(Type type, bool inputType = false)

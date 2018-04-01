@@ -76,6 +76,8 @@
     <Compile Include="ResolverInfo.cs" />
     <Compile Include="ResolverInfoManager.cs" />
     <Compile Include="Security\UserPermissions.cs" />
+    <Compile Include="Types\TimeSpanType.cs" />
+    <Compile Include="Types\DateTimeOffsetType.cs" />
     <Compile Include="Types\UriGraphType.cs" />
     <Compile Include="Types\GraphEnum.cs" />
     <Compile Include="GraphInputObject.cs" />
