@@ -68,8 +68,11 @@
     <Compile Include="FieldMapper.cs" />
     <Compile Include="GraphArguments.cs" />
     <Compile Include="GraphObjectMap.cs" />
+    <Compile Include="OperationFilters\IOperationFilter.cs" />
+    <Compile Include="OperationFilters\OperationFilterType.cs" />
     <Compile Include="Operation\IOperation.cs" />
     <Compile Include="Operation\MutationAttribute.cs" />
+    <Compile Include="Operation\OperationValues.cs" />
     <Compile Include="Operation\QueryAttribute.cs" />
     <Compile Include="PropertyFilterManager.cs" />
     <Compile Include="Operation\ProxyOperation.cs" />

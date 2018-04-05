@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphQL.Language.AST;
+using GraphQL.Server.Operation;
+using GraphQL.Server.OperationFilters;
 using GraphQL.Server.Security;
 using GraphQL.Types;
 using Newtonsoft.Json;
@@ -111,7 +113,17 @@ namespace GraphQL.Server
                 var valuesJson = JsonConvert.SerializeObject(values);
                 var inputModel = JsonConvert.DeserializeObject<TInput>(valuesJson);
                 ValidationError.ValidateObject(inputModel);
-                return function.Invoke(inputModel, fields);
+                var operationValues = new OperationValues()
+                {
+                    FieldName = fieldName,
+                    Fields = fields,
+                    Method = (Func<object, InputField[], object>)function,
+                    Input = inputModel,
+                };
+                Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Pre, operationValues);
+                var output = function.Invoke(inputModel, fields);
+                Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Post, operationValues);
+                return output;
             });
         }
 

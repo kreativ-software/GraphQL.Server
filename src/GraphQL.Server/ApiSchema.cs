@@ -5,6 +5,7 @@ using System.Reflection;
 using GraphQL.Client;
 using GraphQL.Server.Exceptions;
 using GraphQL.Server.Operation;
+using GraphQL.Server.OperationFilters;
 using GraphQL.Server.Types;
 using GraphQL.Types;
 
@@ -33,11 +34,13 @@ namespace GraphQL.Server
         }
 
         public PropertyFilterManager PropertyFilterManager { get; set; }
+        public List<IOperationFilter> OperationFilters { get; private set; }
 
         public ApiSchema(IContainer container) : base(type => (GraphType)container.GetInstance(type))
         {
             Container = container;
             PropertyFilterManager = new PropertyFilterManager();
+            OperationFilters = new List<IOperationFilter>();
         }
 
         public void MapOutput(Type outputType, bool autoMapChildren, bool overwriteMap)
@@ -142,6 +145,11 @@ namespace GraphQL.Server
             {
                 MapOperation(type);
             }
+        }
+
+        public void RunOperationFilters(OperationFilterType pre, OperationValues operationValues)
+        {
+            OperationFilters.
         }
 
         public void Lock()
