@@ -34,13 +34,13 @@ namespace GraphQL.Server
         }
 
         public PropertyFilterManager PropertyFilterManager { get; set; }
-        public List<IOperationFilter> OperationFilters { get; private set; }
+        public Dictionary<OperationFilterType, List<IOperationFilter>> OperationFilters { get; private set; }
 
         public ApiSchema(IContainer container) : base(type => (GraphType)container.GetInstance(type))
         {
             Container = container;
             PropertyFilterManager = new PropertyFilterManager();
-            OperationFilters = new List<IOperationFilter>();
+            OperationFilters = new Dictionary<OperationFilterType, List<IOperationFilter>>();
         }
 
         public void MapOutput(Type outputType, bool autoMapChildren, bool overwriteMap)
@@ -147,9 +147,18 @@ namespace GraphQL.Server
             }
         }
 
-        public void RunOperationFilters(OperationFilterType pre, OperationValues operationValues)
+        public void AddOperationFilter(IOperationFilter operationFilter)
         {
-            OperationFilters.
+            OperationFilters[operationFilter.Type].Add(operationFilter);
+        }
+
+        public OperationValues RunOperationFilters(OperationFilterType pre, OperationValues operationValues)
+        {
+            foreach (var operationFilter in OperationFilters[pre])
+            {
+                operationValues = operationFilter.Run(operationValues);
+            }
+            return operationValues;
         }
 
         public void Lock()

@@ -70,7 +70,8 @@ namespace GraphQL.Server
             var arguments = GraphArguments.FromModel<TInput>();
             var queryArguments = arguments.GetQueryArguments();
             // Function authorization
-            var functionAuth = function.Method.GetCustomAttributes(typeof(AuthorizeAttribute), true).FirstOrDefault() as AuthorizeAttribute;
+            var functionAttributes = (Attribute[])function.Method.GetCustomAttributes(true);
+            var functionAuth = functionAttributes.FirstOrDefault(attr => attr.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
             if (functionAuth == null && function.Method.DeclaringType != null)
             {
                 functionAuth = function.Method.DeclaringType.GetCustomAttributes(typeof(AuthorizeAttribute), true).FirstOrDefault() as AuthorizeAttribute;
@@ -115,19 +116,26 @@ namespace GraphQL.Server
                 ValidationError.ValidateObject(inputModel);
                 var operationValues = new OperationValues()
                 {
+                    Context = context,
                     FieldName = fieldName,
                     Fields = fields,
+                    FunctionAttributes = functionAttributes,
                     Method = (Func<object, InputField[], object>)function,
                     Input = inputModel,
                 };
-                Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Pre, operationValues);
-                var output = function.Invoke(inputModel, fields);
-                Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Post, operationValues);
-                return output;
+                operationValues = Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Pre, operationValues);
+                operationValues.Output = function.Invoke(inputModel, fields);
+                operationValues = Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Post, operationValues);
+                return operationValues.Output;
             });
         }
 
-        private static InputField[] CollectFields(Dictionary<string, IValue> astArguments)
+        private void Field<TOutputObject>(string fieldName, string fieldDescription, QueryArguments queryArguments, Func<ResolveFieldContext<object>, object> p) where TOutputObject : GraphType
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static InputField[] CollectFields(Dictionary<string, IValue> astArguments)
         {
             var output = new List<InputField>();
             foreach (var argument in astArguments)
