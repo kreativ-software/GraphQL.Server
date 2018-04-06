@@ -58,8 +58,7 @@ namespace GraphQL.Server.Operation
                         Context = context,
                         FieldName = fieldName,
                         Fields = new InputField[0],
-                        FunctionAttributes = (Attribute[])methodInfo.GetCustomAttributes(true),
-                        Method = null,
+                        FunctionAttributes = methodInfo.GetCustomAttributes(true).OfType<Attribute>().ToArray(),
                         Input = inputModel,
                     };
                     operationValues = schema.Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Pre, operationValues);

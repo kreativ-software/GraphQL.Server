@@ -70,7 +70,7 @@ namespace GraphQL.Server
             var arguments = GraphArguments.FromModel<TInput>();
             var queryArguments = arguments.GetQueryArguments();
             // Function authorization
-            var functionAttributes = (Attribute[])function.Method.GetCustomAttributes(true);
+            var functionAttributes = function.Method.GetCustomAttributes(true).OfType<Attribute>().ToArray();
             var functionAuth = functionAttributes.FirstOrDefault(attr => attr.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
             if (functionAuth == null && function.Method.DeclaringType != null)
             {
@@ -120,7 +120,6 @@ namespace GraphQL.Server
                     FieldName = fieldName,
                     Fields = fields,
                     FunctionAttributes = functionAttributes,
-                    Method = (Func<object, InputField[], object>)function,
                     Input = inputModel,
                 };
                 operationValues = Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Pre, operationValues);
@@ -128,11 +127,6 @@ namespace GraphQL.Server
                 operationValues = Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Post, operationValues);
                 return operationValues.Output;
             });
-        }
-
-        private void Field<TOutputObject>(string fieldName, string fieldDescription, QueryArguments queryArguments, Func<ResolveFieldContext<object>, object> p) where TOutputObject : GraphType
-        {
-            throw new NotImplementedException();
         }
 
         internal static InputField[] CollectFields(Dictionary<string, IValue> astArguments)

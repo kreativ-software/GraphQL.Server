@@ -40,7 +40,11 @@ namespace GraphQL.Server
         {
             Container = container;
             PropertyFilterManager = new PropertyFilterManager();
-            OperationFilters = new Dictionary<OperationFilterType, List<IOperationFilter>>();
+            OperationFilters = new Dictionary<OperationFilterType, List<IOperationFilter>>()
+            {
+                { OperationFilterType.Pre, new List<IOperationFilter>() },
+                { OperationFilterType.Post, new List<IOperationFilter>() }
+            };
         }
 
         public void MapOutput(Type outputType, bool autoMapChildren, bool overwriteMap)
