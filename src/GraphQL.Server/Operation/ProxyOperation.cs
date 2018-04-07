@@ -70,10 +70,10 @@ namespace GraphQL.Server.Operation
                     {
                         graphOutput.ThrowErrors();
                     }
-                    var output = query.Data.ToObject(methodInfo.ReturnType);
+                    operationValues.Output = query.Data.ToObject(methodInfo.ReturnType);
                     if (PostOperations.ContainsKey(fieldName))
                     {
-                        operationValues.Output = PostOperations[fieldName](context, fieldName, output);
+                        operationValues.Output = PostOperations[fieldName](context, fieldName, operationValues.Output);
                     }
                     operationValues = schema.Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Post, operationValues);
                     return operationValues.Output;
