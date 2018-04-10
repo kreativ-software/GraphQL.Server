@@ -6,6 +6,7 @@ using System.Reflection;
 using GraphQL.Client;
 using GraphQL.Language.AST;
 using GraphQL.Server.Exceptions;
+using GraphQL.Server.OperationFilters;
 using GraphQL.Types;
 
 namespace GraphQL.Server.Operation
@@ -51,6 +52,17 @@ namespace GraphQL.Server.Operation
                 apiOperation.Field(graphType, fieldName, fieldDescription, queryArguments, context =>
                 {
                     var inputModel = ApiOperation.GetInputFromContext(context, parameters[0].ParameterType);
+                    ValidationError.ValidateObject(inputModel);
+                    var operationValues = new OperationValues()
+                    {
+                        Context = context,
+                        FieldName = fieldName,
+                        Fields = new InputField[0],
+                        FunctionAttributes = methodInfo.GetCustomAttributes(true).OfType<Attribute>().ToArray(),
+                        Input = inputModel,
+                    };
+                    operationValues = schema.Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Pre, operationValues);
+                    
                     var graphClient = GetGraphClient();
                     var query = graphClient.AddSelectionQuery(fieldName, inputModel, context.FieldAst.SelectionSet.Selections.OfType<Field>());
                     var graphOutput = isQuery ? graphClient.RunQueries() : graphClient.RunMutations();
@@ -58,12 +70,13 @@ namespace GraphQL.Server.Operation
                     {
                         graphOutput.ThrowErrors();
                     }
-                    var output = query.Data.ToObject(methodInfo.ReturnType);
+                    operationValues.Output = query.Data.ToObject(methodInfo.ReturnType);
                     if (PostOperations.ContainsKey(fieldName))
                     {
-                        output = PostOperations[fieldName](context, fieldName, output);
+                        operationValues.Output = PostOperations[fieldName](context, fieldName, operationValues.Output);
                     }
-                    return output;
+                    operationValues = schema.Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Post, operationValues);
+                    return operationValues.Output;
                 });
             }
         }

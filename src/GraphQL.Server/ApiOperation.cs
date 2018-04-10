@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphQL.Language.AST;
+using GraphQL.Server.Operation;
+using GraphQL.Server.OperationFilters;
 using GraphQL.Server.Security;
 using GraphQL.Types;
 using Newtonsoft.Json;
@@ -68,10 +70,13 @@ namespace GraphQL.Server
             var arguments = GraphArguments.FromModel<TInput>();
             var queryArguments = arguments.GetQueryArguments();
             // Function authorization
-            var functionAuth = function.Method.GetCustomAttributes(typeof(AuthorizeAttribute), true).FirstOrDefault() as AuthorizeAttribute;
+            var functionAttributes = function.Method.GetCustomAttributes(true).OfType<Attribute>().ToArray();
+            var authorizeAttributeType = typeof(AuthorizeAttribute);
+            var functionAuth = functionAttributes.FirstOrDefault(attr => typeof(AuthorizeAttribute).IsAssignableFrom(attr.GetType())) as AuthorizeAttribute;
             if (functionAuth == null && function.Method.DeclaringType != null)
             {
-                functionAuth = function.Method.DeclaringType.GetCustomAttributes(typeof(AuthorizeAttribute), true).FirstOrDefault() as AuthorizeAttribute;
+                var classAttributes = function.Method.DeclaringType.GetCustomAttributes(true).OfType<Attribute>().ToArray();
+                functionAuth = classAttributes.FirstOrDefault(attr => typeof(AuthorizeAttribute).IsAssignableFrom(attr.GetType())) as AuthorizeAttribute;
             }
             if (functionAuth != null)
             {
@@ -111,11 +116,22 @@ namespace GraphQL.Server
                 var valuesJson = JsonConvert.SerializeObject(values);
                 var inputModel = JsonConvert.DeserializeObject<TInput>(valuesJson);
                 ValidationError.ValidateObject(inputModel);
-                return function.Invoke(inputModel, fields);
+                var operationValues = new OperationValues()
+                {
+                    Context = context,
+                    FieldName = fieldName,
+                    Fields = fields,
+                    FunctionAttributes = functionAttributes,
+                    Input = inputModel,
+                };
+                operationValues = Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Pre, operationValues);
+                operationValues.Output = function.Invoke(inputModel, fields);
+                operationValues = Container.GetInstance<ApiSchema>().RunOperationFilters(OperationFilterType.Post, operationValues);
+                return operationValues.Output;
             });
         }
 
-        private static InputField[] CollectFields(Dictionary<string, IValue> astArguments)
+        internal static InputField[] CollectFields(Dictionary<string, IValue> astArguments)
         {
             var output = new List<InputField>();
             foreach (var argument in astArguments)
