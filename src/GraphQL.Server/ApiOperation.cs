@@ -71,10 +71,12 @@ namespace GraphQL.Server
             var queryArguments = arguments.GetQueryArguments();
             // Function authorization
             var functionAttributes = function.Method.GetCustomAttributes(true).OfType<Attribute>().ToArray();
-            var functionAuth = functionAttributes.FirstOrDefault(attr => attr.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
+            var authorizeAttributeType = typeof(AuthorizeAttribute);
+            var functionAuth = functionAttributes.FirstOrDefault(attr => typeof(AuthorizeAttribute).IsAssignableFrom(attr.GetType())) as AuthorizeAttribute;
             if (functionAuth == null && function.Method.DeclaringType != null)
             {
-                functionAuth = function.Method.DeclaringType.GetCustomAttributes(typeof(AuthorizeAttribute), true).FirstOrDefault() as AuthorizeAttribute;
+                var classAttributes = function.Method.DeclaringType.GetCustomAttributes(true).OfType<Attribute>().ToArray();
+                functionAuth = classAttributes.FirstOrDefault(attr => typeof(AuthorizeAttribute).IsAssignableFrom(attr.GetType())) as AuthorizeAttribute;
             }
             if (functionAuth != null)
             {
