@@ -1,10 +1,12 @@
 ﻿using GraphQL.Server.Exceptions;
 using GraphQL.Server.Operation;
+using GraphQL.Server.Sample.Autorization;
 using GraphQL.Server.Sample.Maps;
 using GraphQL.Server.Sample.Repository;
 
 namespace GraphQL.Server.Sample.Operations
 {
+    [CustomAuthorize("Class")]
     public class TestOperations : IOperation
     {
         public IContainer Container { get; set; }
@@ -22,6 +24,7 @@ namespace GraphQL.Server.Sample.Operations
         }
 
         // ==================== Queries ====================
+        [CustomAuthorize("Method")]
         private Test GetTest(IdInput input, InputField[] fields)
         {
             var test = Container.GetInstance<Data>().GetTest(input.Id);

@@ -1,4 +1,5 @@
 ﻿using GraphQL.Server.Operation;
+using GraphQL.Server.Sample.Autorization;
 using GraphQL.Server.Sample.Output;
 using GraphQL.Server.Sample.Repository;
 
@@ -9,6 +10,7 @@ namespace GraphQL.Server.Sample.Operations
         RobotOutput GetRobot(IdInput input);
     }
 
+    [CustomAuthorize("Class")]
     public class RobotOperation : IOperation, IRobotOperation
     {
         private IContainer Container { get; set; }
@@ -23,6 +25,7 @@ namespace GraphQL.Server.Sample.Operations
             schema.Query.AddQuery<RobotOutput, IdInput>(GetRobot);
         }
 
+        [CustomAuthorize("Method")]
         public RobotOutput GetRobot(IdInput input)
         {
             var robot = Container.GetInstance<Data>().GetRobot(input.Id);
