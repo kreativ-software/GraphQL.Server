@@ -4,9 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using GraphQL.Execution;
 using GraphQL.Types;
-using GraphQL.Validation.Complexity;
 
 namespace GraphQL.Server.Sample.Service.Controllers
 {
@@ -33,7 +31,13 @@ namespace GraphQL.Server.Sample.Service.Controllers
             GraphQLOutput output = null;
             try
             {
-                var executionResult = await Executer.ExecuteAsync(Schema, null, query.Query, null, query.GetInputs());
+                var executionOptions = new ExecutionOptions()
+                {
+                    Schema = Schema,
+                    Query = query.Query,
+                    Inputs = query.GetInputs()
+                };
+                var executionResult = await Executer.ExecuteAsync(executionOptions);
                 output = new GraphQLOutput(executionResult.Data, executionResult.Errors?.ToArray());
             }
             catch (Exception ex)

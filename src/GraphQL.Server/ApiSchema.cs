@@ -36,7 +36,7 @@ namespace GraphQL.Server
         public PropertyFilterManager PropertyFilterManager { get; set; }
         public Dictionary<OperationFilterType, List<IOperationFilter>> OperationFilters { get; private set; }
 
-        public ApiSchema(IContainer container) : base(type => (GraphType)container.GetInstance(type))
+        public ApiSchema(IContainer container) : base(new FuncDependencyResolver(container.GetInstance))
         {
             Container = container;
             PropertyFilterManager = new PropertyFilterManager();
