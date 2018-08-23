@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>GraphQL.ClientBasic</id>
+    <title>GraphQL.ClientBasic</title>
+    <version>$version$</version>
+    <authors>LobsterInk</authors>
+    <owners>LobsterInk</owners>
+    <licenseUrl>https://github.com/LobsterInk/GraphQL.Client/blob/dev/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/LobsterInk/GraphQL.Client</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>GraphQL Client components</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright LobsterInk 2016</copyright>
+    <dependencies>
+      <dependency id="GraphQL" version="2.0.0" />
+      <dependency id="Newtonsoft.Json" version="11.0.2" />
+      <dependency id="GraphQL.Server" version="$version$" />
+      <dependency id="CacheManager.Core" version="1.1.2" />
+      <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.6" />
+    </dependencies>
+    <references>
+      <group>
+        <!--<reference file="GraphQL.dll" />-->
+        <reference file="GraphQL.Client.dll" />
+      </group>
+    </references>
+  </metadata>
+  <files>
+    <!--<file src="bin\Release\GraphQL.dll" target="lib\net45"/>-->
+    <file src="bin\Release\GraphQL.Client.dll" target="lib\net45"/>
+  </files>
+</package>

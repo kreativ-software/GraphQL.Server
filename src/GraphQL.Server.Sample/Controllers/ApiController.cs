@@ -33,7 +33,13 @@ namespace GraphQL.Server.Sample.Controllers
             GraphQLOutput output = null;
             try
             {
-                var executionResult = await Executer.ExecuteAsync(Schema, null, query.Query, null, query.GetInputs());
+                var executionOptions = new ExecutionOptions()
+                {
+                    Schema = Schema,
+                    Query = query.Query,
+                    Inputs = query.GetInputs()
+                };
+                var executionResult = await Executer.ExecuteAsync(executionOptions);
                 output = new GraphQLOutput(executionResult.Data, executionResult.Errors?.ToArray());
             }
             catch (Exception ex)

@@ -13,17 +13,17 @@
     <releaseNotes></releaseNotes>
     <copyright>Copyright LobsterInk 2016</copyright>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="9.0.1" />
+      <dependency id="Newtonsoft.Json" version="11.0.2" />
+      <dependency id="GraphQL" version="2.0.0" />
     </dependencies>
     <references>
       <group>
-        <reference file="GraphQL.dll" />
         <reference file="GraphQL.Server.dll" />
       </group>
     </references>
   </metadata>
   <files>
-    <file src="bin\Release\GraphQL.dll" target="lib\net45"/>
+    <!--<file src="bin\Release\GraphQL.dll" target="lib\net45"/>-->
     <file src="bin\Release\GraphQL.Server.dll" target="lib\net45"/>
   </files>
 </package>

@@ -61,7 +61,13 @@ namespace GraphQL.Server.Test
 
         private string RunOperation(string query, Inputs inputs)
         {
-            var executionResult = Executer.ExecuteAsync(Schema, null, query, null, inputs: inputs).Result;
+            var executionOptions = new ExecutionOptions()
+            {
+                Schema = Schema,
+                Query = query,
+                Inputs = inputs
+            };
+            var executionResult = Executer.ExecuteAsync(executionOptions).Result;
             var output = new GraphQLOutput(executionResult.Data, executionResult.Errors?.ToArray());
             return JsonConvert.SerializeObject(output, SerializerSettings);
         }

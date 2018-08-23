@@ -15,7 +15,7 @@ namespace GraphQL.Server.Sample
             Container = container;
         }
 
-        public IValidationResult Validate(string originalQuery, ISchema schema, Document document, IEnumerable<IValidationRule> rules = null, object userContext = null)
+        public IValidationResult Validate(string originalQuery, ISchema schema, Document document, IEnumerable<IValidationRule> rules = null, object userContext = null, Inputs inputs = null)
         {
             if (rules == null)
             {
@@ -24,8 +24,8 @@ namespace GraphQL.Server.Sample
                 (rules as List<IValidationRule>).RemoveAll(rule =>
                 {
                     return rule is KnownArgumentNames
-                            || rule is ArgumentsOfCorrectType
-                            || rule is FieldsOnCorrectType;
+                           || rule is ArgumentsOfCorrectType
+                           || rule is FieldsOnCorrectType;
                 });
             }
             return new DocumentValidator().Validate(originalQuery, schema, document, rules, userContext);
