@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>GraphQL.Client</id>
-    <title>GraphQL.Client</title>
+    <id>GraphQL.ClientBasic</id>
+    <title>GraphQL.ClientBasic</title>
     <version>$version$</version>
     <authors>LobsterInk</authors>
     <owners>LobsterInk</owners>
